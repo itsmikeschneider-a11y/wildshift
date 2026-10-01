@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F1EA">
+<title>WildShift — become the animal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <button class="back" id="backBtn" aria-label="Back" hidden>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="logo" id="logo">Wild<span>Shift</span></div>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+  </header>
+
+  <!-- 0 Upload -->
+  <section class="screen" data-screen="upload">
+    <h1 class="hero">Run like you.<br>Finish like a <span>cheetah.</span></h1>
+    <p class="sub">Upload a clip up to 60 seconds. Pick your big moment, pick your animal, and watch yourself transform mid-action.</p>
+    <label class="drop" for="fileInput">
+      <span class="drop-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M6 10l6-6 6 6"/><path d="M4 20h16"/></svg></span>
+      <span class="drop-title">Upload a clip</span>
+      <span class="drop-sub">MP4 or MOV · 60 seconds max</span>
+      <span class="tag">Your first clip is free</span>
+    </label>
+    <input type="file" id="fileInput" accept="video/*" hidden>
+    <p class="err" id="uploadErr" role="alert"></p>
+    <div class="label">Best results</div>
+    <div class="tips">
+      <div>Whole body in frame</div>
+      <div>Big movement: run, jump, swing</div>
+      <div>One person in the shot</div>
+    </div>
+  </section>
+
+  <!-- 1 Moment -->
+  <section class="screen" data-screen="moment" hidden>
+    <h2>Pick the moment</h2>
+    <p class="sub">Choose the 5–10 seconds that matter. It plays on a loop.</p>
+    <div class="player">
+      <video id="trimVideo" playsinline muted loop preload="metadata"></video>
+      <button class="play" id="trimPlay" aria-label="Play or pause">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="chip" id="rangeLabel">0:00–0:08</div>
+    </div>
+    <div class="track" id="track">
+      <div class="win" id="win"><div class="morph-mark" id="morphMark"></div></div>
+    </div>
+    <div class="ends"><span>0:00</span><span id="durLabel">0:00</span></div>
+    <label for="startRange" class="label-strong">Start at <span id="startLabel">0:00</span></label>
+    <input id="startRange" type="range" min="0" max="0" step="0.1" value="0">
+    <div class="label-strong">Length</div>
+    <div class="pills" id="lenPills">
+      <button data-len="5">5 sec</button><button data-len="8" class="on">8 sec</button><button data-len="10">10 sec</button>
+    </div>
+    <div class="label-strong">When does the morph hit?</div>
+    <div class="pills" id="morphPills">
+      <button data-morph="early">Early</button><button data-morph="mid" class="on">Middle</button><button data-morph="late">Late</button>
+    </div>
+    <button class="cta" id="toAnimal">Use this moment</button>
+  </section>
+
+  <!-- 2 Animal -->
+  <section class="screen" data-screen="animal" hidden>
+    <h2>Pick your animal</h2>
+    <p class="sub">Match it to the move. Running? Go cheetah.</p>
+    <div class="animals" id="animals"></div>
+    <div class="label-strong">Style</div>
+    <div class="pills two" id="stylePills">
+      <button data-style="toon" class="on">Animated</button><button data-style="real">Realistic</button>
+    </div>
+    <p class="err" id="genErr" role="alert"></p>
+    <button class="cta" id="generate">Transform me into a Cheetah</button>
+  </section>
+
+  <!-- 3 Generating -->
+  <section class="screen center" data-screen="working" hidden>
+    <div class="ring"><span id="pct">0%</span></div>
+    <h2 id="stage">Uploading</h2>
+    <div class="bar"><div id="barFill"></div></div>
+    <p class="sub">Usually takes a minute or two. Keep this page open.</p>
+  </section>
+
+  <!-- 4 Result -->
+  <section class="screen" data-screen="result" hidden>
+    <h2 id="resultTitle">You're a Cheetah.</h2>
+    <div class="result-player"><video id="resultVideo" playsinline controls loop></video></div>
+    <p class="mock-note" id="mockNote" hidden>Test mode: no AI key set, so this "morph" is a stand-in effect.</p>
+    <div id="freeActions" class="stack">
+      <button class="cta" id="openPay">Remove watermark · $1</button>
+      <button class="ghost" id="shareFree">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Share free (with watermark)
+      </button>
+    </div>
+    <div id="paidActions" class="stack" hidden>
+      <div class="unlocked">Watermark removed · HD unlocked<span id="creditsNote"></span></div>
+      <div class="grid2">
+        <button class="cta" id="sharePaid">Share</button>
+        <a class="ghost" id="savePaid" href="#" download>Save</a>
+      </div>
+    </div>
+    <button class="text-btn" id="again">Try a different animal</button>
+    <button class="text-btn" id="newClip">Start over with a new clip</button>
+  </section>
+
+  <!-- Paywall sheet -->
+  <div class="sheet-wrap" id="sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="grab"></div>
+      <h3 id="sheetTitle">Lose the watermark</h3>
+      <p class="sub">Clean, full-quality clip saved to your phone.</p>
+      <button class="plan" data-plan="one"><span><b>This clip</b><small>One clean clip</small></span><span class="price">$1</span></button>
+      <button class="plan on" data-plan="pack"><span><b>10-clip pack</b><small>This clip + 9 more · 40¢ each</small></span><span class="price">$3.99<em>Best value</em></span></button>
+      <button class="cta" id="buy">Buy 10 clips · $3.99</button>
+      <p class="test-note">Test version — no card is charged.</p>
+      <button class="text-btn" id="closePay">Not now</button>
+    </div>
+  </div>
+
+  <!-- Access code -->
+  <div class="sheet-wrap" id="codeSheet" hidden>
+    <form class="sheet" id="codeForm">
+      <h3>Enter access code</h3>
+      <p class="sub">This test version is invite-only.</p>
+      <label for="codeInput" class="label-strong">Access code</label>
+      <input id="codeInput" class="text-input" autocomplete="off">
+      <button class="cta" type="submit">Continue</button>
+    </form>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
